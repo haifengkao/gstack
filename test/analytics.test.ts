@@ -167,9 +167,9 @@ describe('formatReport', () => {
   test('counts hook fire events separately', () => {
     const events: AnalyticsEvent[] = [
       { skill: 'ship', ts: '2026-03-18T15:30:00Z', repo: 'app' },
-      { skill: 'careful', ts: '2026-03-18T16:00:00Z', repo: 'app', event: 'hook_fire', pattern: 'rm_recursive' },
-      { skill: 'careful', ts: '2026-03-18T16:30:00Z', repo: 'app', event: 'hook_fire', pattern: 'rm_recursive' },
-      { skill: 'careful', ts: '2026-03-18T17:00:00Z', repo: 'app', event: 'hook_fire', pattern: 'git_force_push' },
+      { skill: 'hook', ts: '2026-03-18T16:00:00Z', repo: 'app', event: 'hook_fire', pattern: 'rm_recursive' },
+      { skill: 'hook', ts: '2026-03-18T16:30:00Z', repo: 'app', event: 'hook_fire', pattern: 'rm_recursive' },
+      { skill: 'hook', ts: '2026-03-18T17:00:00Z', repo: 'app', event: 'hook_fire', pattern: 'git_force_push' },
     ];
     const report = formatReport(events);
     expect(report).toContain('Safety Hook Events');
@@ -185,7 +185,7 @@ describe('formatReport', () => {
       { skill: 'ship', ts: '2026-03-18T15:30:00Z', repo: 'my-app' },
       { skill: 'ship', ts: '2026-03-18T15:35:00Z', repo: 'my-app' },
       { skill: 'qa', ts: '2026-03-18T16:00:00Z', repo: 'my-api' },
-      { skill: 'careful', ts: '2026-03-18T16:30:00Z', repo: 'my-app', event: 'hook_fire', pattern: 'rm_recursive' },
+      { skill: 'hook', ts: '2026-03-18T16:30:00Z', repo: 'my-app', event: 'hook_fire', pattern: 'rm_recursive' },
     ];
     const report = formatReport(events);
     // Skills counted correctly (hook_fire events excluded from skill counts)
@@ -262,9 +262,9 @@ describe('integration via runScript helper', () => {
   test('hook fire events counted in full pipeline', () => {
     const p = writeTempJSONL('hooks.jsonl', [
       '{"skill":"ship","ts":"2026-03-18T15:30:00Z","repo":"app"}',
-      '{"event":"hook_fire","skill":"careful","pattern":"rm_recursive","ts":"2026-03-18T16:00:00Z","repo":"app"}',
-      '{"event":"hook_fire","skill":"careful","pattern":"rm_recursive","ts":"2026-03-18T16:30:00Z","repo":"app"}',
-      '{"event":"hook_fire","skill":"careful","pattern":"git_force_push","ts":"2026-03-18T17:00:00Z","repo":"app"}',
+      '{"event":"hook_fire","skill":"hook","pattern":"rm_recursive","ts":"2026-03-18T16:00:00Z","repo":"app"}',
+      '{"event":"hook_fire","skill":"hook","pattern":"rm_recursive","ts":"2026-03-18T16:30:00Z","repo":"app"}',
+      '{"event":"hook_fire","skill":"hook","pattern":"git_force_push","ts":"2026-03-18T17:00:00Z","repo":"app"}',
     ]);
     const output = runScript(p);
     expect(output).toContain('Safety Hook Events');

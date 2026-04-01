@@ -129,21 +129,6 @@ describe('gstack-relink (#578)', () => {
     expect(output).toContain('setup');
   });
 
-  // Test: gstack-upgrade does NOT get double-prefixed
-  test('does not double-prefix gstack-upgrade directory', () => {
-    setupMockInstall(['qa', 'ship', 'gstack-upgrade']);
-    run(`${path.join(installDir, 'bin', 'gstack-config')} set skill_prefix true`);
-    run(`${path.join(installDir, 'bin', 'gstack-relink')}`, {
-      GSTACK_INSTALL_DIR: installDir,
-      GSTACK_SKILLS_DIR: skillsDir,
-    });
-    // gstack-upgrade should keep its name, NOT become gstack-gstack-upgrade
-    expect(fs.existsSync(path.join(skillsDir, 'gstack-upgrade'))).toBe(true);
-    expect(fs.existsSync(path.join(skillsDir, 'gstack-gstack-upgrade'))).toBe(false);
-    // Regular skills still get prefixed
-    expect(fs.existsSync(path.join(skillsDir, 'gstack-qa'))).toBe(true);
-  });
-
   // Test 15: gstack-config set skill_prefix triggers relink
   test('gstack-config set skill_prefix triggers relink', () => {
     setupMockInstall(['qa', 'ship']);
@@ -197,19 +182,6 @@ describe('gstack-patch-names (#620/#578)', () => {
     // Verify name: field is restored to unprefixed
     expect(readSkillName(path.join(installDir, 'qa'))).toBe('qa');
     expect(readSkillName(path.join(installDir, 'ship'))).toBe('ship');
-  });
-
-  test('gstack-upgrade name: not double-prefixed', () => {
-    setupMockInstall(['qa', 'gstack-upgrade']);
-    run(`${path.join(installDir, 'bin', 'gstack-config')} set skill_prefix true`);
-    run(`${path.join(installDir, 'bin', 'gstack-relink')}`, {
-      GSTACK_INSTALL_DIR: installDir,
-      GSTACK_SKILLS_DIR: skillsDir,
-    });
-    // gstack-upgrade should keep its name, NOT become gstack-gstack-upgrade
-    expect(readSkillName(path.join(installDir, 'gstack-upgrade'))).toBe('gstack-upgrade');
-    // Regular skill should be prefixed
-    expect(readSkillName(path.join(installDir, 'qa'))).toBe('gstack-qa');
   });
 
   test('SKILL.md without frontmatter is a no-op', () => {

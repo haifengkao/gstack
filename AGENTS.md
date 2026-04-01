@@ -25,10 +25,6 @@ Skills live in `.agents/skills/`. Invoke them by name (e.g., `/office-hours`).
 | `/retro` | Weekly retro with per-person breakdowns and shipping streaks. |
 | `/browse` | Headless browser — real Chromium, real clicks, ~100ms/command. |
 | `/setup-browser-cookies` | Import cookies from your real browser for authenticated testing. |
-| `/careful` | Warn before destructive commands (rm -rf, DROP TABLE, force-push). |
-| `/freeze` | Lock edits to one directory. Hard block, not just a warning. |
-| `/guard` | Activate both careful + freeze at once. |
-| `/unfreeze` | Remove directory edit restrictions. |
 | `/gstack-upgrade` | Update gstack to the latest version. |
 
 ## Build commands

@@ -32,10 +32,6 @@ Detailed guides for every gstack skill — philosophy, workflow, and examples.
 | [`/codex`](#codex) | **Second Opinion** | Independent review from OpenAI Codex CLI. Three modes: code review (pass/fail gate), adversarial challenge, and open consultation with session continuity. Cross-model analysis when both `/review` and `/codex` have run. |
 | | | |
 | **Safety & Utility** | | |
-| [`/careful`](#safety--guardrails) | **Safety Guardrails** | Warns before destructive commands (rm -rf, DROP TABLE, force-push, git reset --hard). Override any warning. Common build cleanups whitelisted. |
-| [`/freeze`](#safety--guardrails) | **Edit Lock** | Restrict all file edits to a single directory. Blocks Edit and Write outside the boundary. Accident prevention for debugging. |
-| [`/guard`](#safety--guardrails) | **Full Safety** | Combines /careful + /freeze in one command. Maximum safety for prod work. |
-| [`/unfreeze`](#safety--guardrails) | **Unlock** | Remove the /freeze boundary, allowing edits everywhere again. |
 | [`/connect-chrome`](#connect-chrome) | **Chrome Controller** | Launch your real Chrome controlled by gstack with the Side Panel extension. Watch every action live. |
 | [`/setup-deploy`](#setup-deploy) | **Deploy Configurator** | One-time setup for `/land-and-deploy`. Detects your platform, production URL, and deploy commands. |
 | [`/gstack-upgrade`](#gstack-upgrade) | **Self-Updater** | Upgrade gstack to the latest version. Detects global vs vendored install, syncs both, shows what changed. |
@@ -1031,55 +1027,6 @@ Claude: Running independent Codex review...
 
 ---
 
-## Safety & Guardrails
-
-Four skills that add safety rails to any Claude Code session. They work via Claude Code's PreToolUse hooks — transparent, session-scoped, no configuration files.
-
-### `/careful`
-
-Say "be careful" or run `/careful` when you're working near production, running destructive commands, or just want a safety net. Every Bash command gets checked against known-dangerous patterns:
-
-- `rm -rf` / `rm -r` — recursive delete
-- `DROP TABLE` / `DROP DATABASE` / `TRUNCATE` — data loss
-- `git push --force` / `git push -f` — history rewrite
-- `git reset --hard` — discard commits
-- `git checkout .` / `git restore .` — discard uncommitted work
-- `kubectl delete` — production resource deletion
-- `docker rm -f` / `docker system prune` — container/image loss
-
-Common build artifact cleanups (`rm -rf node_modules`, `dist`, `.next`, `__pycache__`, `build`, `coverage`) are whitelisted — no false alarms on routine operations.
-
-You can override any warning. The guardrails are accident prevention, not access control.
-
-### `/freeze`
-
-Restrict all file edits to a single directory. When you're debugging a billing bug, you don't want Claude accidentally "fixing" unrelated code in `src/auth/`. `/freeze src/billing` blocks all Edit and Write operations outside that path.
-
-`/investigate` activates this automatically — it detects the module being debugged and freezes edits to that directory.
-
-```
-You:   /freeze src/billing
-
-Claude: Edits restricted to src/billing/. Run /unfreeze to remove.
-
-        [Later, Claude tries to edit src/auth/middleware.ts]
-
-Claude: BLOCKED — Edit outside freeze boundary (src/billing/).
-        Skipping this change.
-```
-
-Note: this blocks Edit and Write tools only. Bash commands like `sed` can still modify files outside the boundary — it's accident prevention, not a security sandbox.
-
-### `/guard`
-
-Full safety mode — combines `/careful` + `/freeze` in one command. Destructive command warnings plus directory-scoped edits. Use when touching prod or debugging live systems.
-
-### `/unfreeze`
-
-Remove the `/freeze` boundary, allowing edits everywhere again. The hooks stay registered for the session — they just allow everything. Run `/freeze` again to set a new boundary.
-
----
-
 ## `/gstack-upgrade`
 
 Keep gstack current with one command. It detects your install type (global at `~/.claude/skills/gstack` vs vendored in your project at `.claude/skills/gstack`), runs the upgrade, syncs both copies if you have dual installs, and shows you what changed.
@@ -1094,7 +1041,6 @@ Claude: Current version: 0.7.4
         - Browse handoff for CAPTCHAs and auth walls
         - /codex multi-AI second opinion
         - /qa always uses browser now
-        - Safety skills: /careful, /freeze, /guard
         - Proactive skill suggestions
 
         Upgraded to 0.8.2. Both global and project installs synced.
