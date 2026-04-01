@@ -56,7 +56,7 @@ Real files get committed to your repo (not a submodule), so `git clone` just wor
 
 > **Contributing or need full history?** The commands above use `--depth 1` for a fast install. If you plan to contribute or need full git history, do a full clone instead:
 > ```bash
-> git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+> git clone https://github.com/haifengkao/gstack.git ~/.claude/skills/gstack
 > ```
 
 ### Codex, Gemini CLI, or Cursor
@@ -66,7 +66,7 @@ gstack works on any agent that supports the [SKILL.md standard](https://github.c
 Install to one repo:
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git .agents/skills/gstack
+git clone --single-branch --depth 1 https://github.com/haifengkao/gstack.git .agents/skills/gstack
 cd .agents/skills/gstack && ./setup --host codex
 ```
 
@@ -75,7 +75,7 @@ When setup runs from `.agents/skills/gstack`, it installs the generated Codex sk
 Install once for your user account:
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+git clone --single-branch --depth 1 https://github.com/haifengkao/gstack.git ~/gstack
 cd ~/gstack && ./setup --host codex
 ```
 
@@ -86,7 +86,7 @@ discovery from the source repo checkout.
 Or let setup auto-detect which agents you have installed:
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+git clone --single-branch --depth 1 https://github.com/haifengkao/gstack.git ~/gstack
 cd ~/gstack && ./setup --host auto
 ```
 
@@ -97,7 +97,7 @@ For Codex-compatible hosts, setup now supports both repo-local installs from `.a
 gstack works with [Factory Droid](https://factory.ai). Skills install to `.factory/skills/` and are discovered automatically. Sensitive skills (ship, land-and-deploy, guard) use `disable-model-invocation: true` so Droids don't auto-invoke them.
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+git clone --single-branch --depth 1 https://github.com/haifengkao/gstack.git ~/gstack
 cd ~/gstack && ./setup --host factory
 ```
 
